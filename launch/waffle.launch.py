@@ -11,11 +11,11 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
+    world_file_name = 'maze_waffle.world'
+    world = os.path.join(get_package_share_directory('f1tenth_gym_agent'),
+                         'worlds', world_file_name)
     launch_file_dir = os.path.join(get_package_share_directory('f1tenth_gym_agent'), 'launch')
-    world = os.path.join(get_package_share_directory('f1tenth_gym_agent'), 'worlds', "maze_waffle.world")
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
-    rviz_file = os.path.join(get_package_share_directory('td3'), 'launch', 'pioneer3dx.rviz')
-
 
     return LaunchDescription([
         IncludeLaunchDescription(
@@ -32,14 +32,7 @@ def generate_launch_description():
         ),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([launch_file_dir, '/robot_state_publisher.launch.py']),
+            PythonLaunchDescriptionSource([launch_file_dir, '/robot_state_publisher_waffle.launch.py']),
             launch_arguments={'use_sim_time': use_sim_time}.items(),
         ),
-
-        #Node(package='rviz2',
-        #    executable='rviz2',
-        #    name='rviz2',  
-        #    arguments=['-d', rviz_file],
-        #    output='screen'
-        #),
     ])
